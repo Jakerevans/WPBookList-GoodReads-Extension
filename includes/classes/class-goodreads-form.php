@@ -19,7 +19,11 @@ if ( ! class_exists( 'WPBookList_Goodreads_Form', false ) ) :
 class WPBookList_Goodreads_Form {
 
 	public static function output_goodreads_form(){
-		global $wpdb;
+	
+		// For grabbing an image from media library
+		wp_enqueue_media();
+
+			global $wpdb;
 		// Getting all user-created libraries
 		$table_name = $wpdb->prefix . 'wpbooklist_jre_list_dynamic_db_names';
 		$db_row = $wpdb->get_results("SELECT * FROM $table_name");
@@ -28,16 +32,16 @@ class WPBookList_Goodreads_Form {
 						<select id="wpbooklist_select_backup_box" name="cars">    
     						<option selected="" disabled="">Select a Goodreads File</option>';
 
-            $string2 = '';
-            foreach(glob(GOODREADS_UPLOAD_DIR.'*.*') as $filename){
-                $orig_filename = basename($filename);
-                $filename = basename($filename);
-                $filename = str_replace('_library_', ' ', $filename);
-                $filename = str_replace('.csv', '', $filename);
-                $filename = ucfirst($filename);
-                $display_name = explode('_-_', $filename);
-                $string2 = $string2.'<option class="wpbooklist-goodreads-actual-option" id="'.$filename.'" value="'.$orig_filename.'">'.$display_name[0].' '.$display_name[1].' - '.date('h:i a', $display_name[2]).'</option>';
-            }
+        $string2 = '';
+        foreach(glob(GOODREADS_UPLOAD_DIR.'*.*') as $filename){
+            $orig_filename = basename($filename);
+            $filename = basename($filename);
+            $filename = str_replace('_library_', ' ', $filename);
+            $filename = str_replace('.csv', '', $filename);
+            $filename = ucfirst($filename);
+            $display_name = explode('_-_', $filename);
+            $string2 = $string2.'<option class="wpbooklist-goodreads-actual-option" id="'.$filename.'" value="'.$orig_filename.'">'.$display_name[0].' '.$display_name[1].' - '.date('h:i a', $display_name[2]).'</option>';
+        }
 
 
 
@@ -90,6 +94,7 @@ class WPBookList_Goodreads_Form {
             </div>';
 
     		return $string1.$string2.$string3.$string4.$string5;
+
 	}
 }
 
